@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: da29de29d46633d47b4881170b350c47
+timeCreated: 1487523659
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: KIWANO APPLE
+  fontNames:
+  - KIWANO APPLE
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
