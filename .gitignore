@@ -3,3 +3,4 @@ Library/ShaderCache/*
 Library/ScriptAssemblies/*
 Temp/*
 screenshots/*
+.vscode/*
