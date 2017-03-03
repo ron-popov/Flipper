@@ -5,7 +5,6 @@
 	using System;
 	using System.IO;
 	using System.Net;
-	using System.Threading;
 	using System.Collections;
 #endregion
 
@@ -142,22 +141,27 @@ public class BottleController : MonoBehaviour
 						isGameOver = true;
 						StartCoroutine(NoFlip());
 
-
 						//API KEY : "EagerBeautifulPanda"
-						if(userName == "")
+
+						if(PlayerPrefs.GetInt("SendScore") == 1)
 						{
-							this.header.text = "In order to send your score , please set a name is the settings"; 
-						}
-						else
-						{
-							Thread thread = new Thread(() => SendScoreThread(userName , score));
-							thread.Start();
+							if(userName == "")
+							{
+								this.header.text = "In order to send your score , please set a name is the settings"; 
+							}
+							else
+							{
+								
+								SendScoreThread(userName , score);
+							}
 						}					
 						
 					}
 					else if(len == 0 && RegulateValue(r.velocity.x) == 0 && RegulateValue(r.velocity.y) == 0 && RegulateValue(r.angularVelocity) == 0 && wasBottleSent && !isGameOver)
 					{
-						//TODO: Fix this , doesn't work
+						score =+ 5;
+						wasBottleSent = false;					
+						StartCoroutine(YesFlip());
 					}
 					else if(len == 3 && RegulateValue(r.velocity.x) == 0 && RegulateValue(r.velocity.y) == 0 && RegulateValue(r.angularVelocity) == 0 && wasBottleSent && !isGameOver && Math.Abs(r.rotation - rotationBefore) < 10)
 					{
@@ -244,12 +248,30 @@ public class BottleController : MonoBehaviour
 		/* Sends the score to the server IN THE BACKGROUND */
 		public void SendScoreThread(string scopeName , int score)
 		{
-			//Using http because https doens't seem to work
-			string ans = SendHttp("http://dollarone.games/elympics/submitHighscore?key=EagerBeautifulPanda&name=" + scopeName + "&score=" + score);
-			if(ans != "OK")
-				print("An error occured while sending your score");
-			else
-				print("Score sent successfuly !");
+			string url = ("http://dollarone.games/elympics/submitHighscore?key=EagerBeautifulPanda&name=" + scopeName + "&score=" + score);
+			WWW www = new WWW(url);
+			StartCoroutine(WaitForRequest(www));
+				
+		}
+
+		IEnumerator WaitForRequest(WWW www)
+		{
+			yield return www;
+	
+			// check for errors
+			if (www.error == null)
+			{
+				if(www.text == "OK")
+				{
+					Debug.Log("All good");
+				}
+				else
+				{
+					Debug.Log("WWW Error: "+ www.error);					
+				}
+			} else {
+				Debug.Log("WWW Error: "+ www.error);
+			}    
 		}
 
 		/* Sends a request to the given url */

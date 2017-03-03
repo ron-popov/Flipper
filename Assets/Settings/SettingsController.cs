@@ -29,23 +29,33 @@ public class SettingsController : MonoBehaviour {
 	{
 		#region Name Input
 			string name = GameObject.Find("Canvas/InputField/Text").GetComponent<Text>().text;
-			if(name.Length < 1)
-			{
-				if(PlayerPrefs.HasKey("name") && PlayerPrefs.GetString("name").Length > 0)
-				{
-					name = PlayerPrefs.GetString("name");					
-				}
-				else
-				{
-					text.text = "Name too short";
-					return;					
-				}
+			
 
-			}
-			else if(name.Length > 32)
+			if(GameObject.Find("Canvas/Toggle").GetComponent<Toggle>().isOn)
 			{
-				text.text = "Name is too long";
-				return;
+				PlayerPrefs.SetInt("SendScore" , 1);
+				if(name.Length == 0)
+				{
+					if(PlayerPrefs.HasKey("name") && PlayerPrefs.GetString("name").Length > 0)
+					{
+						name = PlayerPrefs.GetString("name");					
+					}
+					else
+					{
+						text.text = "Name too short";
+						return;					
+					}
+
+				}
+				else if(name.Length > 32)
+				{
+					text.text = "Name is too long";
+					return;
+				}
+			}
+			else
+			{
+				PlayerPrefs.SetInt("SendScore" , 0);
 			}
 		#endregion
 
